@@ -59,8 +59,8 @@ public class PostService {
         return postRepository.findAllByAndActive(sortedByName,"X");
     }
 
-    public void setSizePost(Long id){
-        Post post = postRepository.findFirstById(id);
+    public void setSizePost(String url){
+        Post post = postRepository.findAllByUrl(url);
         if (post != null){
             Long size = post.getSize();
             post.setSize(size+1);

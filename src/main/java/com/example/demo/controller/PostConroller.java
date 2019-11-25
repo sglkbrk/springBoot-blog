@@ -63,8 +63,8 @@ public class PostConroller {
         return postService.getAllPostCategoryCount(id);
     }
 
-    @GetMapping("/setSizePost/{id}")
-    public void setSizePost(@PathVariable(value = "id") Long id){
-        postService.setSizePost(id);
+    @GetMapping("/setSizePost/{url}")
+    public void setSizePost(@PathVariable(value = "url") String url){
+        postService.setSizePost(url);
     }
 }
