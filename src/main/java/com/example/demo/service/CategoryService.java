@@ -3,11 +3,14 @@ package com.example.demo.service;
 import com.example.demo.model.Category;
 import com.example.demo.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@CacheConfig(cacheNames={"Category"})
 public class CategoryService {
 
     @Autowired

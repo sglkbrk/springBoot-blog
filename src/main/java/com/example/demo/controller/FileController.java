@@ -3,6 +3,7 @@ package com.example.demo.controller;
 
 import com.example.demo.service.FileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -12,8 +13,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+
 import java.io.IOException;
+
+
 
 @RequestMapping("FileService")
 @RestController
@@ -26,7 +31,11 @@ public class FileController {
     @Autowired
     private FileStorageService fileStorageService;
 
+    @Autowired
+    private ServletContext servletContext;
+
     @GetMapping("/downloadFile/{fileName:.+}")
+    @Cacheable("Resource")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
         // Load file as Resource
         Resource resource = fileStorageService.loadFileAsResource(fileName);
@@ -43,10 +52,13 @@ public class FileController {
         if (contentType == null) {
             contentType = "application/octet-stream";
         }
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(resource);
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
+//        return ResponseEntity.ok()
+//                .contentType(MediaType.parseMediaType(contentType))
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+//                .body(resource);
     }
+
+
 }
